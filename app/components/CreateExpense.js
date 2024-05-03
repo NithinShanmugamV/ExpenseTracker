@@ -19,7 +19,6 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function CreateExpense() {
   const [modalVisible, setModalVisible] = useState(false);
-  const [open, setOpen] = useState(false);
   const [isFocus, setIsFocus] = useState(false);
   const [isFocusMop, setIsFocusMop] = useState(false);
   const [month, setMonth] = useState(null);
@@ -33,14 +32,20 @@ export default function CreateExpense() {
     amount: 0,
   });
 
-  // const {todos, todoDispatch} = useContext(TaskContext);
   const { expenseDispatch, userData, expense } = useContext(ExpenseContext);
   const categoryData = [
     { label: "Food", value: "food" },
     { label: "Transportation", value: "vehicle" },
     { label: "Shopping", value: "shopping" },
+    { label: "Bills", value: "bills" },
+    { label: "Recharges", value: "recharges" },
+    { label: "Education", value: "education" },
+    { label: "Health", value: "health" },
+    { label: "Home", value: "home" },
+    { label: "Telephone", value: "telephone" },
     { label: "Others", value: "others" },
   ];
+  
 
   const mopData = [
     { label: "Cash", value: "Cash" },
@@ -53,17 +58,15 @@ export default function CreateExpense() {
   const [showDatePicker, setShowDatePicker] = useState(false);
 
   const onChange = (event, selectedDate) => {
-    console.log("called")
     const currentDate = selectedDate || date;
+    setShowDatePicker(false)
     // setShowDatePicker(Platform.OS === "ios");
-    console.log("called1")
-    setDate(currentDate);
+    setDate(selectedDate);
     const dateObject = new Date(selectedDate); // Convert the date string to a Date object
     const outputString = `${dateObject.getFullYear()}-${dateObject.getMonth() + 1}`;
-    console.log(outputString)
-    setModalData({...modalData, date: date});
+    setModalData({...modalData, date: selectedDate});
     setMonth(outputString)
-    setShowDatePicker(false)
+    
   };
 
   const showDatepicker = () => {
@@ -155,6 +158,7 @@ export default function CreateExpense() {
                   mode="date"
                   display="default"
                   onChange={onChange}
+                  onCl
                 />
               )}
             </View>

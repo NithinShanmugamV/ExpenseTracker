@@ -3,34 +3,19 @@ export const ExpenseReducer = (state, action) => {
     case "ADD_EXPENSE":
       const { month, expense } = action.payload;
       console.log("red data: ", action.payload);
-
-      // return {
-      //   ...state,
-      //   [month]: [
-      //     ...state[month],
-      //     {
-      //       id,
-      //       ...expense,
-      //     },
-      //   ],
-      // };
-
       if (state.hasOwnProperty(month)) {
-        // const id = (state[month].length + 1).toString();
-        // Month exists, append the expense data
         return {
           ...state,
           [month]: [
             ...state[month],
             {
               ...expense,
-              id : state[month].length + 1,
+              id: state[month].length + 1,
             },
           ],
         };
       } else {
-        // Month doesn't exist, create a new entry
-        const id = 1
+        const id = 1;
         return {
           ...state,
           [month]: [
@@ -45,6 +30,21 @@ export const ExpenseReducer = (state, action) => {
     case "FETCH_EXPENSE":
       state = action.payload;
       console.log("fetch reducer: ", state);
+      return state;
+
+    case "REMOVE_EXPENSE":
+      const { monthYr, id } = action.payload;
+      console.log("monthYr: ", monthYr);
+      console.log(id);
+      const updatedExpenses = state[monthYr].filter(
+        (expense) => expense.id !== id
+      );
+      return {
+        ...state,
+        [monthYr]: updatedExpenses,
+      };
+    case "RESET":
+      state = [];
       return state;
     default:
       return state;

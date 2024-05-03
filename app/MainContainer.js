@@ -39,7 +39,7 @@ export default function MainContainer() {
   return (
     <NavigationContainer style = {styles.container} >
       <Tab.Navigator
-        initialRouteName="Expense"
+        initialRouteName="Dashboard"
         barStyle = {styles.bottomBarColor}
         activeColor="#ffffff"
         inactiveColor="#e0e0e0" 
@@ -81,9 +81,9 @@ const styles = StyleSheet.create({
   bottomBarColor: {
     backgroundColor: '#0d0d0d',
     color: "white",
-    borderTopColor: "red",
-    borderLeftColor: "red",
-    borderRightColor: "red",
+    borderTopColor: "#948979",
+    borderLeftColor: "#948979",
+    borderRightColor: "#948979",
     borderTopWidth: 3,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,

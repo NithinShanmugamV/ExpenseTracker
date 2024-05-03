@@ -27,9 +27,11 @@ export default function () {
             const userData = {
               name: name,
               email: email,
+              dob: "",
+              expense: {}
             };
 
-            const url = 'https://jsonserver-eyex.onrender.com/users';
+            const url = 'https://jsonserver-eyex.onrender.com/data';
 
             const requestOptions = {
               method: 'POST',

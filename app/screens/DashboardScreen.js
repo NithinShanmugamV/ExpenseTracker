@@ -22,7 +22,6 @@ export default function DashboardScreen() {
     setCurrentYear((prevYear) =>
       currentMonth === 12 ? prevYear + 1 : prevYear
     );
-    // loadExpense()
   };
 
   const handlePreviousMonth = () => {
@@ -30,10 +29,8 @@ export default function DashboardScreen() {
     setCurrentYear((prevYear) =>
       currentMonth === 1 ? prevYear - 1 : prevYear
     );
-    // loadExpense()
   };
 
-  console.log(expense);
   const categorizeMonthlyExpensesFunc = (monthlyExpense) => {
     const categorizedMonthlyExpenses = {};
     if (monthlyExpense == undefined) return null;
@@ -47,15 +44,6 @@ export default function DashboardScreen() {
 
     return categorizedMonthlyExpenses;
   };
-
-  useEffect(() => {
-    console.log(currentYear + "-" + currentMonth);
-    console.log("expense: ", expense[currentYear + "-" + currentMonth]);
-    setCategorizedMonthlyExpense(
-      categorizeMonthlyExpensesFunc(expense[currentYear + "-" + currentMonth])
-    );
-    setMonth(currentYear + "-" + currentMonth)
-  }, [expense, currentMonth, currentYear]);
 
   const loadExpense = async () => {
     try {
@@ -84,6 +72,17 @@ export default function DashboardScreen() {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    console.log(currentYear + "-" + currentMonth);
+    console.log("expense: ", expense[currentYear + "-" + currentMonth]);
+    setCategorizedMonthlyExpense(
+      categorizeMonthlyExpensesFunc(expense[currentYear + "-" + currentMonth])
+    );
+    setMonth(currentYear + "-" + currentMonth)
+  }, [expense, currentMonth, currentYear, user]);
+
+  
 
   useEffect(() => {
     console.log(month)

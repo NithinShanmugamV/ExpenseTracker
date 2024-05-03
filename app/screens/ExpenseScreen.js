@@ -4,6 +4,7 @@ import { ExpenseContext } from "../context/ExpenseContextProvider";
 import Header from "../components/Header";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 export default function ExpenseScreen() {
   const { expense } = useContext(ExpenseContext);
   // Calculate total expenses
@@ -25,18 +26,51 @@ export default function ExpenseScreen() {
     });
   });
 
+  let highestSpentMonth = "";
+  let highestMonthlySpending = 0;
+  Object.entries(expense).forEach(([month, monthlyExpenses]) => {
+    const totalMonthlyExpenses = monthlyExpenses.reduce((total, expenseItem) => total + expenseItem.amount, 0);
+    if (totalMonthlyExpenses > highestMonthlySpending) {
+      highestMonthlySpending = totalMonthlyExpenses;
+      highestSpentMonth = month;
+      const month1 = parseInt(month.split('-')[1], 10) - 1; // Subtract 1 to get the correct index
+      highestSpentMonth = monthNames[month1];
+    }
+  });
+
   return (
     <SafeAreaView style={styles.container}>
-      <View >
+      <View>
         <Header />
         <Text style={[styles.textLabel, styles.title]}>Expense Insights</Text>
-        <Text style={styles.textLabel}>Total Expenses: ${totalExpenses}</Text>
-        <Text style={styles.textLabel}>
-          Highest Spent Category: {highestSpentCategory}
-        </Text>
-        <Text style={styles.textLabel}>
-          Highest Spent Amount: ${highestSpentAmount}
-        </Text>
+        <View style={styles.modalEle}>
+          <View style={[styles.insideEle]}>
+            <Text style={[styles.textLabel]}>
+              Total Expenses: Rs.{totalExpenses}
+            </Text>
+          </View>
+
+          <View style={[styles.insideEle]}>
+            <Text style={[styles.textLabel]}>
+              Highest Spent Category: {highestSpentCategory}
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.modalEle}>
+          <View style={[styles.insideEle]}>
+            <Text style={[styles.textLabel]}>
+            Highest Spent Amount: Rs.{highestSpentAmount}
+            </Text>
+          </View>
+
+          <View style={[styles.insideEle]}>
+            <Text style={[styles.textLabel]}>
+              Highest Spent Month: {highestSpentMonth}
+            </Text>
+          </View>
+        </View>
+
         {/* Add more insights as needed */}
       </View>
     </SafeAreaView>
@@ -45,19 +79,7 @@ export default function ExpenseScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    // backgroundColor: '#ffffff',
-    // padding: 20,
-    // borderRadius: 10,
-    // shadowColor: '#000',
-    // shadowOffset: {
-    //   width: 0,
-    //   height: 2,
-    // },
-    // shadowOpacity: 0.25,
-    // shadowRadius: 3.84,
-    // elevation: 5,
     flex: 1,
-    // justifyContent: "space-between", // Align children with space between
     backgroundColor: "#0d0d0d",
   },
   title: {
@@ -66,9 +88,26 @@ const styles = StyleSheet.create({
     marginTop: "5%",
     marginBottom: "15%",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   textLabel: {
     color: "#ffffff",
+  },
+
+  modalEle: {
+    flexDirection: "row",
+    padding: 10,
+    height: "35%",
+    margin: 5,
+  },
+  insideEle: {
+    flex: 1,
+    padding: 20,
+    flexWrap: 'wrap',
+    backgroundColor: "#3d3d3d",
+    margin: 8,
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
