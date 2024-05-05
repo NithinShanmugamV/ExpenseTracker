@@ -8,9 +8,11 @@ import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import { Button } from "react-native-paper";
 import { UserContext } from "../context/UserContextProvider";
 import CreateExpense from "../components/CreateExpense";
-
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Entypo } from "@expo/vector-icons";
 export default function DashboardScreen() {
-  const { expense, setUserData, expenseDispatch, userData } = useContext(ExpenseContext);
+  const { expense, setUserData, expenseDispatch, userData } =
+    useContext(ExpenseContext);
   const { user } = useContext(UserContext);
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
@@ -57,7 +59,7 @@ export default function DashboardScreen() {
           .then((data) => {
             console.log("from url: ", data[0].expense);
             setUserData(data[0]);
-            console.log("userData: ", userData)
+            console.log("userData: ", userData);
             expenseDispatch({
               type: "FETCH_EXPENSE",
               payload: data[0].expense,
@@ -67,6 +69,19 @@ export default function DashboardScreen() {
             // Alert.alert(err.message);
             console.log(err);
           });
+      } else {
+        AsyncStorage.getItem("expense")
+          .then((data) => {
+            if (data) {
+              expenseDispatch({
+                type: "FETCH_EXPENSE",
+                payload: JSON.parse(data),
+              });
+            } else {
+              console.log("No expense data stored in AsyncStorage");
+            }
+          })
+          .catch((err) => console.log(err));
       }
     } catch (err) {
       console.log(err);
@@ -79,13 +94,11 @@ export default function DashboardScreen() {
     setCategorizedMonthlyExpense(
       categorizeMonthlyExpensesFunc(expense[currentYear + "-" + currentMonth])
     );
-    setMonth(currentYear + "-" + currentMonth)
+    setMonth(currentYear + "-" + currentMonth);
   }, [expense, currentMonth, currentYear, user]);
 
-  
-
   useEffect(() => {
-    console.log(month)
+    console.log(month);
     loadExpense();
   }, [user, month]);
 
@@ -115,12 +128,19 @@ export default function DashboardScreen() {
               <View key={category} style={styles.box}>
                 <Text style={styles.textLabel}>{category}</Text>
                 {categorizedMonthlyExpense[category].map((expense) => (
-                  <ListItem key={expense.id} item={expense} >{console.log("id: ", expense.id)}</ListItem>
+                  <ListItem key={expense.id} item={expense}>
+                    {console.log("id: ", expense.id)}
+                  </ListItem>
                 ))}
               </View>
             ))
           ) : (
-            <Text style={styles.textLabel}>No expense added yet</Text>
+            <View style={styles.noExpense}>
+              <Text style={styles.textLabel}>
+                No expense added yet. Press{" "}
+                <Entypo name="add-to-list" size={20} color= "white" /> button to add expense
+              </Text>
+            </View>
           )}
         </ScrollView>
       </View>
@@ -160,7 +180,11 @@ const styles = StyleSheet.create({
   dashboardButton: {
     backgroundColor: "blue",
   },
+
+  noExpense: {
+    flex: 1,
+    alignItems: "center",
+    marginTop: "50%",
+    fontSize: 10
+  },
 });
-/*
-return <ListItem key={item.id} item={item} />;
-*/

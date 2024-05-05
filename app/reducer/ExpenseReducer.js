@@ -44,7 +44,7 @@ export const ExpenseReducer = (state, action) => {
         [monthYr]: updatedExpenses,
       };
     case "RESET":
-      state = [];
+      state = {};
       return state;
     default:
       return state;

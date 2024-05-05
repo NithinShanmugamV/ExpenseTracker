@@ -52,8 +52,8 @@ export default function ListItem({ item }) {
         <Text style={styles.textLabel}>{amount}</Text>
       </View>
 
-      <MaterialIcons
-        name="cancel"
+      <MaterialCommunityIcons
+        name="delete"
         color="red"
         size={30}
         onPress={() => {

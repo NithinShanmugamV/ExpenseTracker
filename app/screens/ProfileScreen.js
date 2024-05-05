@@ -1,13 +1,23 @@
 import { Alert, Button, StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { FIREBASE_AUTH } from "../FirebaseConfig";
 import { ExpenseContext } from "../context/ExpenseContextProvider";
+import { UserContext } from "../context/UserContextProvider";
 // import {TaskContext} from '../context/TaskContextProvider';
 
 export default function ProfileScreen() {
   const navigation = useNavigation();
-  const {expenseDispatch} = useContext(ExpenseContext)
+  const {expenseDispatch, expense} = useContext(ExpenseContext)
+  const {user, setUser} = useContext(UserContext);
+
+  const signOut = () => {
+    if(user == null){
+      expenseDispatch({type: 'RESET'})
+      console.log("logged out", expense)
+    }
+  }
+
   return (
     <View style={styles.container}>
       <View>
@@ -16,7 +26,10 @@ export default function ProfileScreen() {
           style={styles.button}
           onPress={() => {
             FIREBASE_AUTH.signOut().then(res => {
-              // expenseDispatch({type: 'RESET'})
+              expenseDispatch({type: 'RESET'})
+              setUser(null)
+              console.log("user: ", user)
+              signOut()
             }).catch(err => {
               console.log(err)
             })

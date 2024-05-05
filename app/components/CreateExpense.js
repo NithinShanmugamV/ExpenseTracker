@@ -45,7 +45,6 @@ export default function CreateExpense() {
     { label: "Telephone", value: "telephone" },
     { label: "Others", value: "others" },
   ];
-  
 
   const mopData = [
     { label: "Cash", value: "Cash" },
@@ -59,14 +58,15 @@ export default function CreateExpense() {
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
-    setShowDatePicker(false)
+    setShowDatePicker(false);
     // setShowDatePicker(Platform.OS === "ios");
     setDate(selectedDate);
     const dateObject = new Date(selectedDate); // Convert the date string to a Date object
-    const outputString = `${dateObject.getFullYear()}-${dateObject.getMonth() + 1}`;
-    setModalData({...modalData, date: selectedDate});
-    setMonth(outputString)
-    
+    const outputString = `${dateObject.getFullYear()}-${
+      dateObject.getMonth() + 1
+    }`;
+    setModalData({ ...modalData, date: selectedDate });
+    setMonth(outputString);
   };
 
   const showDatepicker = () => {
@@ -122,10 +122,7 @@ export default function CreateExpense() {
                 onChangeText={(val) =>
                   setModalData({ ...modalData, name: val })
                 }
-                styles={[
-                  styles.input,
-                  { color: modalData.name ? "white" : "black" },
-                ]}
+                style={[styles.input]}
               />
             </View>
 
@@ -133,23 +130,6 @@ export default function CreateExpense() {
 
             <View style={styles.modalEle}>
               <Text style={styles.textLabel}>Date: </Text>
-              {/* <Button title="Select date" onPress={() => setOpen(true)} /> */}
-              {/* <DatePicker
-                modal
-                open={open}
-                date={modalData.date}
-                onConfirm={date => {
-                  setOpen(false);
-                  const dateObject = new Date(date); // Convert the date string to a Date object
-                  const outputString = `${dateObject.getFullYear()}-${dateObject.getMonth() + 1}`;
-                  console.log(outputString)
-                  setModalData({...modalData, date: date});
-                  setMonth(outputString)
-                }}
-                onCancel={() => {
-                  setOpen(false);
-                }}
-              /> */}
               <Button onPress={showDatepicker} title="Show date picker" />
               {showDatePicker && (
                 <DateTimePicker
@@ -264,7 +244,7 @@ export default function CreateExpense() {
                 onChangeText={(val) =>
                   setModalData({ ...modalData, amount: Number(val) })
                 }
-                styles={styles.input}
+                style={[styles.input]}
               />
             </View>
 
@@ -343,9 +323,8 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 5,
     padding: 10,
-    marginBottom: 20,
-    width: "100%", // Adjust width as needed
-    backgroundColor: "red",
+    width: "70%", 
+    color: "white",
   },
 
   radioButton: {

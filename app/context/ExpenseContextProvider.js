@@ -9,6 +9,8 @@ import {
 import { UserContext } from "./UserContextProvider";
 import { ExpenseReducer } from "../reducer/ExpenseReducer";
 import isEqual from "lodash/isEqual";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 export const ExpenseContext = createContext();
 
@@ -86,9 +88,11 @@ const ExpenseTrackerContextProvider = ({ children }) => {
             .catch((error) => {
               console.error("Error:", error.message);
             });
+        } else {
+          await AsyncStorage.setItem('expense', JSON.stringify(expense));
         }
       } catch (err) {
-        console.error("Error:", error.message);
+        console.error("Error:", err.message);
       }
     };
     saveTodos();
