@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity, Alert } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -7,7 +7,7 @@ import AntDesign from "react-native-vector-icons/AntDesign";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import Foundation from "react-native-vector-icons/Foundation";
 import { ExpenseContext } from "../context/ExpenseContextProvider";
-
+import ViewExpense from "./ViewExpense";
 
 const categoryIcons = {
   bills: { icon: "text-document-inverted", family: "Entypo" }, //problem
@@ -23,9 +23,10 @@ const categoryIcons = {
 
 export default function ListItem({ item }) {
   const { category, name, amount, date } = item;
-  
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedExpense, setSelectedExpense] = useState(null);
 
-  const {expenseDispatch} = useContext(ExpenseContext)
+  const { expenseDispatch } = useContext(ExpenseContext);
 
   const iconDetails = categoryIcons[category] || categoryIcons.others;
 
@@ -35,7 +36,11 @@ export default function ListItem({ item }) {
         <AntDesign name={iconDetails.icon} color="#40A2D8" size={30} />
       )}
       {iconDetails.family === "MaterialCommunityIcons" && (
-        <MaterialCommunityIcons name={iconDetails.icon} color="#40A2D8" size={30} />
+        <MaterialCommunityIcons
+          name={iconDetails.icon}
+          color="#40A2D8"
+          size={30}
+        />
       )}
       {iconDetails.family === "MaterialIcons" && (
         <MaterialIcons name={iconDetails.icon} color="#40A2D8" size={30} />
@@ -47,10 +52,10 @@ export default function ListItem({ item }) {
         <Entypo name={iconDetails.icon} color="#40A2D8" size={30} />
       )}
 
-      <View>
+      <TouchableOpacity onPress={() => setModalVisible(true)}>
         <Text style={styles.textLabel}>{name}</Text>
         <Text style={styles.textLabel}>{amount}</Text>
-      </View>
+      </TouchableOpacity>
 
       <MaterialCommunityIcons
         name="delete"
@@ -64,14 +69,19 @@ export default function ListItem({ item }) {
               {
                 text: "Yes",
                 onPress: () => {
-                  console.log(date, item.date)
+                  console.log(date, item.date);
                   const dateObject = new Date(date);
-                  const outputString = `${dateObject.getFullYear()}-${dateObject.getMonth() + 1}`;
-                  expenseDispatch({type: "REMOVE_EXPENSE", payload: {
-                    id: item.id,
-                    monthYr: outputString
-                  }})
-                }
+                  const outputString = `${dateObject.getFullYear()}-${
+                    dateObject.getMonth() + 1
+                  }`;
+                  expenseDispatch({
+                    type: "REMOVE_EXPENSE",
+                    payload: {
+                      id: item.id,
+                      monthYr: outputString,
+                    },
+                  });
+                },
               },
               {
                 text: "No",
@@ -79,6 +89,14 @@ export default function ListItem({ item }) {
               },
             ]
           );
+        }}
+      />
+
+      <ViewExpense
+        visible={modalVisible}
+        expenseData={item}
+        onCloseModal={() => {
+          setModalVisible(false);
         }}
       />
     </TouchableOpacity>
@@ -103,4 +121,3 @@ const styles = StyleSheet.create({
     color: "#ffffff",
   },
 });
-
